@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public float speed;
-    public float direction;
+    public float speed; // valor é daclarado no unitycine 
+    public float direction; // setado com valor de input e vetores do RigidBody
     public Rigidbody2D rig;
-    public float jumper;
+    public float jumper; // valor declarado no Unitycine
     public float maxVelocityY = 10;
     private bool canJump = true;
     public int contJump = 0;
@@ -55,6 +55,7 @@ public class Player : MonoBehaviour
         {
             //esta correndo
             animator.SetBool("isRunning", true);
+
 
 
         }
