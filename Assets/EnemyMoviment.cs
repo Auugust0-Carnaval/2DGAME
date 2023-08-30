@@ -18,16 +18,17 @@ public class EnemyMoviment : MonoBehaviour
 
 
     //animação do inimigo
-
     public Animator animator;
+
+    private Player playerScript; //refeencia a classe Player
     
 
 
     private void Start()
     {
+        playerScript = FindObjectOfType<Player>(); 
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-            rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>(); // pega dados incluidas no componente de "Animator" e seta na variavel
     }
 
@@ -52,17 +53,44 @@ public class EnemyMoviment : MonoBehaviour
                 spriteRenderer.flipX = false; // inverte sprite do inimigo para direita
             }
 
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, jumpDetectionDistance);
+            //RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, jumpDetectionDistance);
+            ////Debug.DrawRay(transform.position, direction * jumpDetectionDistance, Color.red);
             //Debug.DrawRay(transform.position, direction * jumpDetectionDistance, Color.red);
-            Debug.DrawRay(transform.position, direction * jumpDetectionDistance, Color.red);
 
-            if (!isAntecipatingJump && hit.collider != null && hit.collider.CompareTag("box"))
+            //if(!isAntecipatingJump && hit.collider != null && hit.collider.CompareTag("Player"))
+            //{
+
+            //    Debug.Log("Detect box obetacule");
+            //    StartCoroutine(AnticipateJump());
+
+            //    if (playerScript != null)
+            //    {
+            //        playerScript.TakeDamege(50); // quantidade de dado que o player recebe
+            //        var currentLife = playerScript.currentHealth.ToString();
+            //        Debug.Log(currentLife);
+            //    }
+
+            //}
+
+
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, jumpDetectionDistance);
+
+            if (!isAntecipatingJump && hit.collider != null)
             {
+                if (hit.collider.CompareTag("Player"))
+                {
+                    Debug.Log("Enemy detected player");
+                    StartCoroutine(AnticipateJump());
 
-                Debug.Log("Detect box obetacule");
-                StartCoroutine(AnticipateJump());
-
+                    if (playerScript != null)
+                    {
+                        playerScript.TakeDamege(50);
+                        var currentLife = playerScript.currentHealth.ToString();
+                        Debug.Log(currentLife);
+                    }
+                }
             }
+
 
             // Move o inimigo na direção do player
             transform.Translate(direction * speed * Time.deltaTime);
