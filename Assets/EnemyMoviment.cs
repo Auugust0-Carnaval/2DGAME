@@ -10,10 +10,11 @@ public class EnemyMoviment : MonoBehaviour
     public Transform target; // Referência ao transform do PlayerOne
     public float speed = 5.0f; // Velocidade de movimento do inimigo
     public float jumpForce = 7.0f; // força de pulo de enimigo
-    public float jumpDetectionDistance = 1.0f; //distancia de detecção para fazer o pulo;
-    public float antecipationTime = 0.7f; // tempo para antecipar o pulo
+    public float jumpDetectionDistance = 10.5f; //distancia de detecção para fazer o pulo;
+    public float antecipationTime = 1.7f; // tempo para antecipar o pulo
     private Rigidbody2D rb;
     private bool isAntecipatingJump = false;
+    private SpriteRenderer spriteRenderer;
 
 
     //animação do inimigo
@@ -24,7 +25,9 @@ public class EnemyMoviment : MonoBehaviour
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+            rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>(); // pega dados incluidas no componente de "Animator" e seta na variavel
     }
 
@@ -38,12 +41,25 @@ public class EnemyMoviment : MonoBehaviour
 
             // Calcula a direção para o player
             Vector2 direction = (target.position - transform.position).normalized;
-            animator.SetBool("isRunnig", false);
+
+            //faz a vereficação do jogador em relação ao inimigo
+            if(direction.x < 0) // vetor x = horizontal
+            {
+                spriteRenderer.flipX = true; //inverte sprite do inimigo para esqueda
+            }
+            else
+            {
+                spriteRenderer.flipX = false; // inverte sprite do inimigo para direita
+            }
 
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, jumpDetectionDistance);
+            //Debug.DrawRay(transform.position, direction * jumpDetectionDistance, Color.red);
+            Debug.DrawRay(transform.position, direction * jumpDetectionDistance, Color.red);
 
-            if (!isAntecipatingJump && hit.collider != null && hit.collider.CompareTag("ground"))
+            if (!isAntecipatingJump && hit.collider != null && hit.collider.CompareTag("box"))
             {
+
+                Debug.Log("Detect box obetacule");
                 StartCoroutine(AnticipateJump());
 
             }
