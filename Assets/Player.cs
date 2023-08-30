@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
             rig.AddForce(Vector2.up * jumper, ForceMode2D.Impulse);
             canJump = false;
 
-            Debug.Log(contJump++);
+            //Debug.Log(contJump++);
         }
 
         // Limita a velocidade vertical
