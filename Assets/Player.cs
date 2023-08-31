@@ -31,7 +31,6 @@ public class Player : MonoBehaviour
     private float dashCooldownEndTime;
 
     //exibir vida
-
     public TextMeshProUGUI healthText; // refeencia ao componente Text
 
 
@@ -39,16 +38,14 @@ public class Player : MonoBehaviour
     {
         currentHealth = maxHealth; // setando valor inicial da vida do jogador (100)
         spriteRenderer = GetComponent<SpriteRenderer>();
-
         animator = GetComponent<Animator>();
-
         healthText = GameObject.Find("text").GetComponent<TextMeshProUGUI>(); // busca o gameObject pelo Find() e seta na variavel
 
     }
 
     void UpdateHealthText()
     {
-        healthText.text = "vida" + currentHealth.ToString(); // atualiza o texto com a vaiavel
+        healthText.text = currentHealth.ToString(); // atualiza o texto com a vaiavel
     }
 
     void Update()
@@ -61,7 +58,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q) && !isDashing && Time.time >= dashCooldownEndTime) // input da tecla "Q" ativa o dashing
         {
             isDashing = true; // ativa o dashing
-            dashEndTime = Time.time + dashDuration;
+            dashEndTime = Time.time + dashDuration; // duarcao do dashing
             dashCooldownEndTime = Time.time + 0.8f;
         }
 
@@ -97,18 +94,18 @@ public class Player : MonoBehaviour
             spriteRenderer.flipX = true; //vira para esquerda
         }
 
-        //Debug.Log(currentHealth);
+        Debug.Log(currentHealth);
     }
 
     void OnCollisionEnter2D(Collision2D collision) // metodo de colisao, adicionando uma tag do GameObject como parametro
     {
         if (collision.gameObject.CompareTag("ground"))
         {
-            canJump = true; // Permite o pulo novamente ao tocar no chão
+            canJump = true; // Permite o pulo novamente ao tocar no chão (ground)
         }
     }
 
-    void FixedUpdate()
+    void FixedUpdate() // funcao de execucao de intevalos reculares (0.02s)- segundos
     {
         if (isDashing)
         {
@@ -138,7 +135,7 @@ public class Player : MonoBehaviour
     //funcao para tomar dano
     public void TakeDamege(int damageAmout)
     {
-        currentHealth -= damageAmout; //subritai o dano autual coma vida atual do player
+        currentHealth = currentHealth - damageAmout; //subritai o dano autual coma vida atual do player
         UpdateHealthText(); //chama o metodo e atualiza  variavel a cada dano tomado
 
         if(currentHealth <= 0) // se o  hp do personagem for menor ou igaul a 0
