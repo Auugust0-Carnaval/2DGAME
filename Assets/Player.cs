@@ -75,11 +75,14 @@ public class Player : MonoBehaviour
             animator.SetBool("isRunning", false);
         }
 
-        if (canJump && Input.GetKeyDown(KeyCode.Space))
+
+        if (canJump && Input.GetKeyDown(KeyCode.Space) && !animator.GetBool("isJumping"))
         {
+            animator.SetBool("isJumping", true);
             rig.AddForce(Vector2.up * jumper, ForceMode2D.Impulse);
             canJump = false;
         }
+
 
         // Limita a velocidade vertical
         if (rig.velocity.y > maxVelocityY)
@@ -103,7 +106,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("ground"))
         {
-            //animator.SetBool("")
+            animator.SetBool("isJumping", false);
             canJump = true; // Permite o pulo novamente ao tocar no chão (ground)
         }
     }
