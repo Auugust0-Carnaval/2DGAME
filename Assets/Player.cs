@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 
     public int maxHealth = 100; // essa sera a vida maxima do player
     public int currentHealth; // vidal atual do Player
+    private bool hasDied = false; // adicionando uma flag para controlar se o jogador ja morreu
 
 
     public float speed; // valor é daclarado no unitycine 
@@ -30,8 +31,9 @@ public class Player : MonoBehaviour
     private float dashEndTime;
     private float dashCooldownEndTime;
 
-    //exibir vida
-    public TextMeshProUGUI healthText; // refeencia ao componente Text
+    public GameOverManager gameOverManager;
+
+    //movimentacao do personagem
 
 
     void Start()
@@ -39,17 +41,11 @@ public class Player : MonoBehaviour
         currentHealth = maxHealth; // setando valor inicial da vida do jogador (100)
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-        healthText = GameObject.Find("text").GetComponent<TextMeshProUGUI>(); // busca o gameObject pelo Find() e seta na variavel
-
-    }
-
-    void UpdateHealthText()
-    {
-        healthText.text = currentHealth.ToString(); // atualiza o texto com a vaiavel
     }
 
     void Update()
     {
+
         transform.rotation = Quaternion.Euler(0f, 0f, 0f); //não deixa que o personagem tenha uma rotação nos eixos x,y,z | Quartenion = metodo de referencia a rotação
         direction = Input.GetAxis("Horizontal"); // seta na variavel inputs do teclado como = a-d ou sentinhas direcionais
 
@@ -76,7 +72,7 @@ public class Player : MonoBehaviour
         }
 
 
-        if (canJump && Input.GetKeyDown(KeyCode.Space) && !animator.GetBool("isJumping"))
+        if (canJump == true && Input.GetKeyDown(KeyCode.Space) && !animator.GetBool("isJumping"))
         {
             animator.SetBool("isJumping", true);
             rig.AddForce(Vector2.up * jumper, ForceMode2D.Impulse);
@@ -137,27 +133,36 @@ public class Player : MonoBehaviour
             //cooldown do dash terminou, permita o proximo dash/
 
             //posso adioconar logico como efeitos sonoros ou animaçõe visuais
-        } 
+        }
     }
 
     //funcao para tomar dano
     public void TakeDamege(int damageAmout)
     {
         currentHealth = currentHealth - damageAmout; //subritai o dano autual coma vida atual do player
-        UpdateHealthText(); //chama o metodo e atualiza  variavel a cada dano tomado
 
-        if(currentHealth <= 0) // se o  hp do personagem for menor ou igaul a 0
+        if(currentHealth <= 0 && !hasDied) // se o  hp do personagem for menor ou igaul a 0
         {
             Die(); // persnagem morre
-
-             // colocarei a animaçaõ em breve
-
         }
     }
 
     void Die()
     {
+        if (!hasDied)
+        {
+            hasDied = true;
+            animator.SetBool("isDie", true);
+            Debug.Log("voce esta morto");
+        }
+        //animator.SetBool("isDie", false);
+        GameOver();
+    }
 
+    void GameOver()
+    {
+        //gameOverManager.ShowGameOverPanel();
 
     }
 }
+
