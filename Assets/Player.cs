@@ -57,9 +57,11 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q) && !isDashing && Time.time >= dashCooldownEndTime) // input da tecla "Q" ativa o dashing
         {
+            animator.SetBool("isDashing", true);
             isDashing = true; // ativa o dashing
             dashEndTime = Time.time + dashDuration; // duarcao do dashing
             dashCooldownEndTime = Time.time + 0.8f;
+
         }
 
         if (Input.GetAxis("Horizontal") != 0)
@@ -101,6 +103,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("ground"))
         {
+            //animator.SetBool("")
             canJump = true; // Permite o pulo novamente ao tocar no chão (ground)
         }
     }
@@ -109,6 +112,7 @@ public class Player : MonoBehaviour
     {
         if (isDashing)
         {
+
             if (Time.time < dashEndTime)
             {
                 rig.velocity = new Vector2(direction * dashSpeed, rig.velocity.y);
@@ -116,6 +120,7 @@ public class Player : MonoBehaviour
             }
             else
             {
+                animator.SetBool("isDashing", false); // desliga a animação do dashing
                 isDashing = false;
             }
         }
