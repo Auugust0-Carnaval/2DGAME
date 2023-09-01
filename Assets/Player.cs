@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
     public GameOverManager gameOverManager;
 
     //movimentacao do personagem
-
+    private bool canMove = true; // variavel para controle de movimento
 
     void Start()
     {
@@ -47,7 +47,12 @@ public class Player : MonoBehaviour
     {
 
         transform.rotation = Quaternion.Euler(0f, 0f, 0f); //não deixa que o personagem tenha uma rotação nos eixos x,y,z | Quartenion = metodo de referencia a rotação
-        direction = Input.GetAxis("Horizontal"); // seta na variavel inputs do teclado como = a-d ou sentinhas direcionais
+
+        if (canMove)
+        {
+            direction = Input.GetAxis("Horizontal"); // seta na variavel inputs do teclado como = a-d ou sentinhas direcionais
+        }
+
 
         //condicao do dash
 
@@ -154,6 +159,8 @@ public class Player : MonoBehaviour
             hasDied = true;
             animator.SetBool("isDie", true);
             Debug.Log("voce esta morto");
+
+            //canMove = false;
         }
         //animator.SetBool("isDie", false);
         GameOver();
