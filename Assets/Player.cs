@@ -159,6 +159,7 @@ public class Player : MonoBehaviour
             hasDied = true;
             animator.SetBool("isDie", true);
             Debug.Log("voce esta morto");
+            canMove = false;
 
             //canMove = false;
         }
